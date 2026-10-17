@@ -1,0 +1,470 @@
+{
+  "name": "@mnemosyne-plugins/mnemo-youtube",
+  "displayName": "MnemoPlayer",
+  "version": "0.1.0",
+  "vendor": "Mnemosyne Labs",
+  "license": "MIT",
+  "repository": "https://github.com/Mnemosyne-OS/MnemoPlayer",
+  "category": "Creative",
+  "icon": "icon.svg",
+  "description": "Watch and listen to YouTube in a visible player, keep your own playlists, play the songs of a folder you choose, search by voice, and look after your channel: statistics, comments, replies and uploads you send yourself.",
+  "descriptionI18n": {
+    "en": "Watch and listen to YouTube in a visible player, keep your own playlists, play the songs of a folder you choose, search by voice, and look after your channel: statistics, comments, replies and uploads you send yourself.",
+    "fr": "Regarde et écoute YouTube dans un lecteur visible, garde tes propres playlists, joue les chansons d'un dossier que tu choisis, cherche à la voix, et occupe-toi de ta chaîne : statistiques, commentaires, réponses et mises en ligne que tu envoies toi-même.",
+    "es": "Mira y escucha YouTube en un reproductor visible, guarda tus propias listas, reproduce las canciones de una carpeta que elijas, busca por voz y cuida tu canal: estadísticas, comentarios, respuestas y subidas que envías tú."
+  },
+  "keywords": [
+    "youtube",
+    "video",
+    "playlist",
+    "player"
+  ],
+  "permissions": [
+    "youtube:search",
+    "youtube:account",
+    "dialog:open"
+  ],
+  "updateStrategy": "git",
+  "entrypoints": {
+    "renderer": "index.html"
+  },
+  "widgets": [
+    {
+      "id": "mnemo-youtube-main",
+      "icon": "▶️",
+      "name": "MnemoPlayer",
+      "route": "index.html",
+      "defaultWidth": 900,
+      "defaultHeight": 760
+    },
+    {
+      "id": "mnemo-youtube-player",
+      "icon": "▶️",
+      "name": "MnemoPlayer · Player",
+      "route": "index.html",
+      "openOnLaunch": false
+    },
+    {
+      "id": "mnemo-youtube-queue",
+      "icon": "☰",
+      "name": "MnemoPlayer · Up next",
+      "route": "index.html",
+      "openOnLaunch": false
+    },
+    {
+      "id": "mnemo-youtube-sound",
+      "icon": "🎚",
+      "name": "MnemoPlayer · Sound",
+      "route": "index.html",
+      "openOnLaunch": false
+    },
+    {
+      "id": "mnemo-youtube-search",
+      "icon": "🔎",
+      "name": "MnemoPlayer · Search",
+      "route": "index.html",
+      "openOnLaunch": false
+    },
+    {
+      "id": "mnemo-youtube-channel",
+      "icon": "◉",
+      "name": "MnemoPlayer · My channel",
+      "route": "index.html",
+      "openOnLaunch": false
+    }
+  ],
+  "boards": [
+    {
+      "id": "exploded",
+      "name": "Exploded view",
+      "nameI18n": {
+        "fr": "Vue éclatée",
+        "es": "Vista separada",
+        "de": "Explosionsansicht",
+        "pt": "Vista explodida",
+        "ru": "Раздельный вид",
+        "zh": "分屏视图"
+      },
+      "zoom": 0.8,
+      "windows": [
+        {
+          "id": "mnemo-youtube-player",
+          "x": 0,
+          "y": 0,
+          "w": 0.42,
+          "h": 0.6
+        },
+        {
+          "id": "mnemo-youtube-sound",
+          "x": 0,
+          "y": 0.6,
+          "w": 0.42,
+          "h": 0.4
+        },
+        {
+          "id": "mnemo-youtube-queue",
+          "x": 0.42,
+          "y": 0,
+          "w": 0.29,
+          "h": 1
+        },
+        {
+          "id": "mnemo-youtube-search",
+          "x": 0.71,
+          "y": 0,
+          "w": 0.29,
+          "h": 0.5
+        },
+        {
+          "id": "mnemo-youtube-channel",
+          "x": 0.71,
+          "y": 0.5,
+          "w": 0.29,
+          "h": 0.5
+        }
+      ]
+    }
+  ],
+  "agentGuide": [
+    "Name a playlist, a video, a song or a comment the way the person says it (« Jazz du dimanche », « la vidéo de Léa », « le commentaire de Léa »): MnemoPlayer finds it by its words. Several matches are refused with their names (AMBIGUOUS): pick one and call again.",
+    "To play: playPlaylist for one of the person's playlists, playItem for a title (or the number of a search result: « le deuxième » is number 2), playMusic for their music folder, play / pause / next / previous / setVolume for what is playing.",
+    "To find on YouTube: search (live: true for « un live »). Then playItem with a number or a title, addToPlaylist to keep it.",
+    "Their channel: channelStats, comments (says how many are new). A reply and an upload are PREPARED on screen with draftReply and draftUpload, then sent by the person's own click: never say a reply was sent or a video was uploaded.",
+    "An upload stays private until Google has reviewed the app.",
+    "The equalizer (setEqualizer) shapes the songs of the music folder only: a YouTube video’s sound cannot be filtered from here, and the answer says so. The visualizer (setVisualizer) changes look (bounce is the bouncing bars), turns on or off; no action listens to the computer’s sound.",
+    "The exploded view (one window each for the player, up next, the sound, the search and the channel) opens only from a click: the button in MnemoPlayer or the dock’s right-click. There is no action for it; tell the person where to press."
+  ],
+  "agentActions": [
+    {
+      "id": "nowPlaying",
+      "summary": "What is playing now: title, YouTube or music folder, where it came from, position, volume.",
+      "effect": "read",
+      "params": {}
+    },
+    {
+      "id": "play",
+      "summary": "Resume what is loaded in the player, as the ▶ button does.",
+      "effect": "write",
+      "params": {}
+    },
+    {
+      "id": "pause",
+      "summary": "Pause the player, as the ❚❚ button does.",
+      "effect": "write",
+      "params": {}
+    },
+    {
+      "id": "next",
+      "summary": "Play the next item of the current list. At the end of the list the player stops.",
+      "effect": "write",
+      "params": {}
+    },
+    {
+      "id": "previous",
+      "summary": "Play the previous item of the current list.",
+      "effect": "write",
+      "params": {}
+    },
+    {
+      "id": "setVolume",
+      "summary": "Set the volume to a level, or turn it up, down, mute or unmute.",
+      "details": "Give level (0 to 100) OR change. « Monte le son » is change up (one step of 15).",
+      "effect": "write",
+      "params": {
+        "level": {
+          "type": "number",
+          "description": "The volume, 0 to 100.",
+          "minimum": 0,
+          "maximum": 100
+        },
+        "change": {
+          "type": "string",
+          "description": "up, down, mute or unmute.",
+          "enum": [
+            "up",
+            "down",
+            "mute",
+            "unmute"
+          ]
+        }
+      }
+    },
+    {
+      "id": "playPlaylist",
+      "summary": "Play one of the person's own playlists from its first item.",
+      "effect": "write",
+      "params": {
+        "name": {
+          "type": "string",
+          "description": "The playlist as the person says it (« Jazz du dimanche », « ma playlist sport »).",
+          "maxLength": 120
+        }
+      },
+      "required": [
+        "name"
+      ]
+    },
+    {
+      "id": "playItem",
+      "summary": "Play a video or a song by the words of its title (in the search on screen, the playlists, the person's videos or the music folder), or a search result by its number.",
+      "details": "number is 1-based on the search results on screen. A YouTube link or video id in title plays that video.",
+      "effect": "write",
+      "params": {
+        "title": {
+          "type": "string",
+          "description": "Words of the title as the person says them, a YouTube link, or a video id.",
+          "maxLength": 300
+        },
+        "number": {
+          "type": "number",
+          "description": "The number of a search result on screen (1 = the first).",
+          "minimum": 1,
+          "maximum": 25
+        }
+      }
+    },
+    {
+      "id": "search",
+      "summary": "Search public YouTube videos and show the results; only videos that can play here are kept.",
+      "details": "Uses the person's own YouTube key and its daily quota. The answer numbers the results for playItem.",
+      "effect": "write",
+      "params": {
+        "query": {
+          "type": "string",
+          "description": "The words to search (« jazz », « recette de pain »).",
+          "maxLength": 200
+        },
+        "live": {
+          "type": "boolean",
+          "description": "true for live streams only (« un live de jazz »)."
+        }
+      },
+      "required": [
+        "query"
+      ]
+    },
+    {
+      "id": "createPlaylist",
+      "summary": "Create a new, empty playlist with a name.",
+      "effect": "write",
+      "params": {
+        "name": {
+          "type": "string",
+          "description": "The name of the new playlist.",
+          "maxLength": 80
+        }
+      },
+      "required": [
+        "name"
+      ]
+    },
+    {
+      "id": "addToPlaylist",
+      "summary": "Add what is playing (or a video named by its title) to one of the person's playlists.",
+      "details": "The playlist must exist (createPlaylist first). Adding what is already there answers already: true.",
+      "effect": "write",
+      "params": {
+        "playlist": {
+          "type": "string",
+          "description": "The playlist as the person says it.",
+          "maxLength": 120
+        },
+        "title": {
+          "type": "string",
+          "description": "Words of the title of what to add; leave out for what is playing now.",
+          "maxLength": 300
+        }
+      },
+      "required": [
+        "playlist"
+      ]
+    },
+    {
+      "id": "showTab",
+      "summary": "Show a part of the window: the player, the playlists, the search, the music folder, the channel, the upload form or the settings.",
+      "effect": "write",
+      "params": {
+        "tab": {
+          "type": "string",
+          "description": "The part to show.",
+          "enum": [
+            "player",
+            "playlists",
+            "search",
+            "music",
+            "channel",
+            "upload",
+            "settings"
+          ]
+        }
+      },
+      "required": [
+        "tab"
+      ]
+    },
+    {
+      "id": "playMusic",
+      "summary": "Play the person's music folder from its first song.",
+      "details": "The folder is chosen by the person in the Music tab; without one the refusal says so to the person.",
+      "effect": "write",
+      "params": {}
+    },
+    {
+      "id": "channelStats",
+      "summary": "The person's YouTube channel: subscribers, views, number of videos.",
+      "details": "A count the person hides is null, never 0.",
+      "effect": "read",
+      "params": {}
+    },
+    {
+      "id": "comments",
+      "summary": "The latest comments on the person's channel, with which are new since they last looked.",
+      "effect": "read",
+      "params": {}
+    },
+    {
+      "id": "draftReply",
+      "summary": "Write a reply under a comment of the person's channel, as a DRAFT on screen. It is not sent: the person sends it with a click.",
+      "effect": "write",
+      "params": {
+        "author": {
+          "type": "string",
+          "description": "The author of the comment as the person says it (« Léa »).",
+          "maxLength": 120
+        },
+        "video": {
+          "type": "string",
+          "description": "Words of the video's title, when the author commented on several.",
+          "maxLength": 200
+        },
+        "text": {
+          "type": "string",
+          "description": "The words of the reply.",
+          "maxLength": 5000
+        }
+      },
+      "required": [
+        "text"
+      ]
+    },
+    {
+      "id": "draftUpload",
+      "summary": "Fill the title and description of the upload form and show it. Nothing is uploaded: the person picks the file and sends it with a click.",
+      "effect": "write",
+      "params": {
+        "title": {
+          "type": "string",
+          "description": "The video's title.",
+          "maxLength": 100
+        },
+        "description": {
+          "type": "string",
+          "description": "The video's description.",
+          "maxLength": 5000
+        }
+      }
+    },
+    {
+      "id": "setEqualizer",
+      "summary": "Set the equalizer to a preset (flat, bass, vocal, electronic, jazz, rock, classical, acoustic), as the preset tiles do.",
+      "details": "It shapes the songs of the music folder only; on a YouTube video the answer's say tells the person so. « Mets l'égaliseur en mode jazz » is preset jazz; « plus de basses » is bass; « remets à plat » is flat.",
+      "effect": "write",
+      "params": {
+        "preset": {
+          "type": "string",
+          "description": "The preset.",
+          "enum": [
+            "flat",
+            "bass",
+            "vocal",
+            "electronic",
+            "jazz",
+            "rock",
+            "classical",
+            "acoustic"
+          ]
+        }
+      },
+      "required": [
+        "preset"
+      ]
+    },
+    {
+      "id": "setVisualizer",
+      "summary": "Change the visualizer: a look (bounce, bars, radial, wave), the next look, or turn it on or off.",
+      "details": "Give look OR change. « Mets les petites barres » is look bounce (the bouncing bars, the default); « change l'effet du visualiseur » is change next; « coupe le visualiseur » is change off.",
+      "effect": "write",
+      "params": {
+        "look": {
+          "type": "string",
+          "description": "bounce (the little bouncing bars), bars, radial or wave.",
+          "enum": [
+            "bounce",
+            "bars",
+            "radial",
+            "wave"
+          ]
+        },
+        "change": {
+          "type": "string",
+          "description": "next, on or off.",
+          "enum": [
+            "next",
+            "on",
+            "off"
+          ]
+        }
+      }
+    }
+  ],
+  "voiceCommands": {
+    "fr": [
+      "mets ma playlist Jazz du dimanche",
+      "pause",
+      "chanson suivante",
+      "monte le son",
+      "trouve un live de jazz",
+      "joue le deuxième résultat",
+      "ajoute ça à ma playlist Sport",
+      "joue ma musique",
+      "combien de nouveaux commentaires sur ma chaîne",
+      "prépare une réponse à Léa : merci beaucoup",
+      "mets l'égaliseur en mode jazz",
+      "change l'effet du visualiseur",
+      "coupe le visualiseur",
+      "mets les petites barres"
+    ],
+    "en": [
+      "play my Sunday Jazz playlist",
+      "pause",
+      "next song",
+      "turn the volume up",
+      "find a jazz live stream",
+      "play the second result",
+      "add this to my Sport playlist",
+      "play my music",
+      "how many new comments on my channel",
+      "draft a reply to Léa: thank you so much",
+      "set the equalizer to jazz",
+      "show the bouncing bars",
+      "change the visualizer effect",
+      "turn off the visualizer"
+    ],
+    "es": [
+      "pon mi lista Jazz del domingo",
+      "pausa",
+      "siguiente canción",
+      "sube el volumen",
+      "busca un directo de jazz",
+      "reproduce el segundo resultado",
+      "añade esto a mi lista Deporte",
+      "pon mi música",
+      "cuántos comentarios nuevos hay en mi canal",
+      "prepara una respuesta a Léa: muchas gracias",
+      "pon el ecualizador en modo jazz",
+      "pon las barritas",
+      "cambia el efecto del visualizador",
+      "apaga el visualizador"
+    ]
+  }
+}

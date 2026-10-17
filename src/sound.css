@@ -1,0 +1,91 @@
+/*
+ * The sound panel (doc 151 §10): the visualizer under the player and the
+ * equalizer, in the house glass (skill style-cartouche). The canvas reads its
+ * colours from the --viz-* tokens below, so a theme can recolour the light
+ * without touching the drawing code.
+ */
+.yt-sound {
+  --viz-a: var(--g-chosen);
+  --viz-b: color-mix(in srgb, #2fd0e0 85%, var(--g-chosen));
+  --viz-c: #8f6bff;
+  --viz-cap: #ffffff;
+}
+.yt-sound-bar { gap: 6px; }
+.yt-sound-bar .segmented .icon-btn { font-size: 13px; letter-spacing: -1px; padding: 6px 12px; }
+.yt-sound-bar > .icon-btn { width: 36px; height: 36px; padding: 0; }
+.yt-sound-bar .icon-btn.yt-on { color: var(--g-text); border-color: var(--g-chosen); background: color-mix(in srgb, var(--g-chosen) 24%, var(--glass-fill)); }
+
+/* The stage of the light: dark glass, so the glow reads on a light host theme too. */
+.yt-viz {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 16 / 7;
+  min-height: 140px;
+  border-radius: 14px;
+  overflow: hidden;
+  background:
+    radial-gradient(120% 90% at 50% 110%, color-mix(in srgb, var(--viz-b) 16%, transparent), transparent 60%),
+    color-mix(in srgb, #000 72%, transparent);
+  box-shadow: inset 0 1px 0 var(--glass-shine), inset 0 0 40px color-mix(in srgb, #000 50%, transparent);
+}
+.yt-viz canvas { position: absolute; inset: 0; width: 100%; height: 100%; display: block; }
+
+.yt-eq { display: grid; gap: 10px; }
+.yt-eq .yt-chips { gap: 8px; }
+.yt-eq .chip-tile { padding: 7px 13px; font-size: 13px; }
+.yt-eq-bands { display: grid; grid-template-columns: repeat(10, minmax(0, 1fr)); gap: 4px; align-items: end; }
+.yt-eq-band { display: grid; justify-items: center; gap: 4px; font-size: 11px; color: var(--g-muted); min-width: 0; }
+/* A vertical slider without a rotated box: the writing mode turns the track itself. */
+.yt-eq-band input[type="range"] {
+  writing-mode: vertical-lr;
+  direction: rtl;
+  width: 22px;
+  height: 120px;
+  padding: 0;
+  border-radius: 999px;
+  accent-color: var(--g-chosen);
+}
+@media (max-width: 560px) {
+  .yt-eq-band input[type="range"] { height: 96px; width: 18px; }
+}
+
+/*
+ * The little bouncing bars (doc 151 §11): thin, rounded on top, glowing green,
+ * moved by `transform: scaleY` from the bottom (no layout per frame). The row
+ * glows once, with a drop-shadow on the row, never one shadow per bar.
+ */
+.yt-bounce {
+  display: inline-flex;
+  align-items: flex-end;
+  gap: 3px;
+  height: 22px;
+  filter: drop-shadow(0 0 4px color-mix(in srgb, var(--g-chosen) 55%, transparent));
+}
+.yt-bounce span {
+  flex: 0 0 auto;
+  width: 3px;
+  height: 100%;
+  border-radius: 3px 3px 1px 1px;
+  background: linear-gradient(to top, var(--g-chosen), color-mix(in srgb, #2fd0e0 75%, var(--g-chosen)));
+  transform-origin: 50% 100%;
+  transform: scaleY(0.12);
+  will-change: transform;
+}
+.yt-bounce[data-source="idle"] { filter: none; opacity: .6; }
+.yt-bounce-player { flex: 0 0 auto; }
+/* Large: the visualizer's « bounce » look and the stage of a window that does not play. */
+.yt-bounce.big { width: 100%; height: 100%; gap: 1.2%; justify-content: center; padding: 10% 6% 8%; box-sizing: border-box; filter: drop-shadow(0 0 10px color-mix(in srgb, var(--g-chosen) 60%, transparent)); }
+.yt-bounce.big span { width: auto; flex: 1 1 0; max-width: 26px; border-radius: 6px 6px 2px 2px; }
+.yt-viz-bounce { display: grid; }
+
+/* The tiny bars on the row that plays: CSS only, standing still when paused. */
+.yt-eqbars { display: inline-flex; align-items: flex-end; gap: 2px; height: 12px; margin-right: 6px; vertical-align: -1px; }
+.yt-eqbars i { width: 2px; height: 100%; border-radius: 2px 2px 0 0; background: var(--g-chosen); transform-origin: 50% 100%; transform: scaleY(.35); animation: yt-eqbar 1s ease-in-out infinite alternate; animation-play-state: paused; }
+.yt-eqbars.on i { animation-play-state: running; }
+.yt-eqbars i:nth-child(2) { animation-duration: .7s; animation-delay: -.3s; transform: scaleY(.7); }
+.yt-eqbars i:nth-child(3) { animation-duration: .9s; animation-delay: -.6s; transform: scaleY(.5); }
+.yt-eqbars i:nth-child(4) { animation-duration: .6s; animation-delay: -.1s; transform: scaleY(.85); }
+@keyframes yt-eqbar { from { transform: scaleY(.25); } to { transform: scaleY(1); } }
+@media (prefers-reduced-motion: reduce) {
+  .yt-eqbars i { animation: none; }
+}

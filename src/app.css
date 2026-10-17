@@ -1,0 +1,115 @@
+/*
+ * MnemoPlayer's layout on top of glass.css (the default cartridge look,
+ * skill style-cartouche): the whole width, the player beside the work on a
+ * wide window and above it on a narrow one, icons for the tabs.
+ */
+.yt-app { height: 100%; display: flex; flex-direction: column; gap: 12px; padding: 12px; overflow: hidden; box-sizing: border-box; }
+.yt-app > main { flex: 1 1 auto; }
+.yt-app > nav { flex: 0 0 auto; }
+.yt-tabs { display: flex; gap: 6px; overflow-x: auto; scrollbar-width: none; padding: 2px; }
+.yt-tabs button { flex: 0 0 auto; display: inline-flex; align-items: center; gap: 6px; white-space: nowrap; }
+.yt-tabs button.on { border-color: var(--g-chosen); background: color-mix(in srgb, var(--g-chosen) 22%, var(--glass-fill)); }
+/* The player on the left, the work on the right; one column on a narrow window. */
+.yt-body { min-height: 0; display: grid; gap: 14px; grid-template-columns: minmax(320px, 1fr) minmax(0, 1.7fr); align-items: start; align-content: start; overflow-y: auto; padding: 2px 2px 24px; }
+.yt-side { position: sticky; top: 0; min-width: 0; display: grid; gap: 14px; }
+.yt-work { min-width: 0; display: grid; gap: 14px; grid-template-columns: repeat(auto-fit, minmax(min(100%, 380px), 1fr)); align-content: start; }
+@media (max-width: 900px) {
+  .yt-body { grid-template-columns: minmax(0, 1fr); }
+  .yt-side { position: static; }
+}
+.yt-panel { padding: 14px; display: grid; gap: 12px; align-content: start; min-width: 0; }
+.yt-panel.full { grid-column: 1 / -1; }
+.yt-panel h2 { margin: 0; font-size: 15px; font-weight: 600; }
+.yt-row { display: flex; gap: 8px; align-items: center; flex-wrap: wrap; }
+.yt-row > input[type="text"], .yt-row > input[type="search"], .yt-row > input[type="password"] { flex: 1 1 200px; min-width: 0; }
+.yt-muted { color: var(--g-muted); font-size: 13px; }
+.yt-error { color: var(--g-error); font-size: 13px; }
+.yt-ok { color: var(--g-chosen); font-size: 13px; }
+.yt-note { font-size: 13px; padding: 8px 12px; border-radius: 12px; border: 1px solid color-mix(in srgb, var(--g-chosen) 45%, transparent); background: color-mix(in srgb, var(--g-chosen) 10%, transparent); }
+
+/* The player: always on screen (YouTube's terms: the player stays visible, at least 200 × 200). */
+.yt-stage { position: relative; width: 100%; aspect-ratio: 16 / 9; min-height: 200px; border-radius: 14px; overflow: hidden; background: color-mix(in srgb, #000 70%, transparent); }
+.yt-stage iframe { position: absolute; inset: 0; width: 100%; height: 100%; border: 0; }
+.yt-stage .yt-empty { position: absolute; inset: 0; display: grid; place-items: center; color: var(--g-muted); font-size: 40px; }
+.yt-stage .yt-local { position: absolute; inset: 0; display: grid; place-items: center; align-content: center; gap: 10px; padding: 16px; text-align: center; }
+.yt-controls { display: flex; gap: 6px; align-items: center; flex-wrap: wrap; }
+.yt-controls .icon-btn { width: 40px; height: 40px; padding: 0; color: var(--g-text); font-size: 16px; }
+.yt-controls input[type="range"] { flex: 1 1 120px; min-width: 80px; padding: 0; accent-color: var(--g-chosen); }
+.yt-now { font-size: 14px; font-weight: 500; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+
+/* Lists of videos and songs */
+.yt-list { display: grid; gap: 8px; }
+.yt-item { display: grid; grid-template-columns: auto 1fr auto; gap: 10px; align-items: center; padding: 8px; border-radius: 12px; }
+.yt-item.playing { border-color: var(--g-chosen); }
+.yt-item img { width: 96px; aspect-ratio: 16 / 9; object-fit: cover; border-radius: 8px; }
+.yt-item .yt-thumb-none { width: 96px; aspect-ratio: 16 / 9; display: grid; place-items: center; border-radius: 8px; background: var(--glass-fill); font-size: 20px; }
+.yt-item .yt-meta { min-width: 0; display: grid; gap: 2px; }
+.yt-item .yt-title { font-size: 14px; overflow: hidden; text-overflow: ellipsis; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; }
+.yt-item .yt-actions { display: flex; gap: 6px; align-items: center; }
+.yt-item .yt-actions select { max-width: 150px; }
+.yt-badge { display: inline-block; font-size: 11px; padding: 1px 8px; border-radius: 999px; border: 1px solid var(--glass-edge); }
+.yt-badge.live { border-color: var(--g-error); color: var(--g-error); }
+.yt-badge.new { border-color: var(--g-chosen); color: var(--g-chosen); }
+
+.yt-chips { display: flex; flex-wrap: wrap; gap: 10px; }
+.yt-stats { display: grid; gap: 10px; grid-template-columns: repeat(auto-fit, minmax(120px, 1fr)); }
+.yt-stat { padding: 10px 12px; display: grid; gap: 2px; }
+.yt-stat b { font-size: 20px; }
+
+.yt-comment { padding: 10px 12px; display: grid; gap: 6px; }
+.yt-comment.focus { box-shadow: 0 0 0 2px var(--g-chosen), inset 0 1px 0 var(--glass-shine); }
+.yt-comment p { margin: 0; white-space: pre-wrap; overflow-wrap: anywhere; }
+.yt-comment textarea { width: 100%; min-height: 64px; resize: vertical; }
+.yt-replies { padding-left: 12px; border-left: 2px solid var(--glass-edge); display: grid; gap: 4px; font-size: 13px; }
+
+.yt-steps { display: grid; gap: 10px; margin: 0; padding: 0; list-style: none; }
+.yt-steps li { display: grid; grid-template-columns: 28px 1fr; gap: 10px; align-items: start; }
+.yt-steps .n { width: 26px; height: 26px; border-radius: 50%; display: grid; place-items: center; border: 1px solid var(--glass-edge); font-size: 13px; }
+.yt-steps .n.done { background: var(--g-chosen); border-color: var(--g-chosen); color: #fff; }
+.yt-steps .body { display: grid; gap: 8px; min-width: 0; }
+
+.yt-progress { height: 8px; border-radius: 999px; background: var(--glass-fill); overflow: hidden; }
+.yt-progress > span { display: block; height: 100%; background: var(--g-chosen); transition: width .4s; }
+label.yt-field { display: grid; gap: 4px; font-size: 13px; }
+label.yt-field textarea { min-height: 90px; resize: vertical; }
+
+/* A phone: nothing wider than the window (measured at 375 px: 67 px over before this). */
+.yt-panel > *, .yt-list > * { min-width: 0; }
+@media (max-width: 560px) {
+  .yt-app { padding: 8px; }
+  .yt-item { grid-template-columns: auto 1fr; }
+  .yt-item img, .yt-item .yt-thumb-none { width: 72px; }
+  .yt-item .yt-actions { grid-column: 1 / -1; justify-content: flex-end; flex-wrap: wrap; }
+}
+
+/*
+ * Sections that fold (doc 151 §12): the header stays, the chevron turns. A
+ * section inside a section is not glass again (no glass on glass).
+ */
+.yt-section { gap: 10px; }
+.yt-section-head { flex-wrap: nowrap; min-width: 0; }
+.yt-section-title { flex: 1 1 auto; min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.yt-section-head > .icon-btn { flex: 0 0 auto; width: 32px; height: 32px; padding: 0; }
+.yt-chevron span { display: inline-block; transition: transform .2s; }
+.yt-section.folded > .yt-section-head .yt-chevron span { transform: rotate(-90deg); }
+.yt-section-body { display: grid; gap: 12px; min-width: 0; }
+.yt-section-body[hidden] { display: none; }
+.yt-section .yt-section { padding: 0; background: none; border: 0; box-shadow: none; backdrop-filter: none; -webkit-backdrop-filter: none; }
+.yt-avatar { border-radius: 50%; vertical-align: middle; margin-right: 8px; }
+@media (prefers-reduced-motion: reduce) { .yt-chevron span { transition: none; } }
+
+/* The player folded: its controls go, its stage stays (YouTube's frame at its 200 px minimum; a song's <audio> mounted, not shown). */
+.yt-player .yt-section-title .yt-now { font-size: 15px; }
+.yt-player.folded .yt-stage.yt { aspect-ratio: auto; height: 200px; }
+.yt-player.folded .yt-stage.local, .yt-player.folded .yt-stage.empty, .yt-player.folded .yt-stage.elsewhere { height: 0; min-height: 0; aspect-ratio: auto; }
+.yt-mini-play { width: 32px; height: 32px; padding: 0; }
+.yt-stage .yt-elsewhere { display: grid; grid-template-rows: 1fr auto; padding-bottom: 14px; font-size: 13px; text-align: center; }
+
+/* The tab bar's right side: reopen icons, the board button. */
+.yt-tabs-gap { flex: 1 1 auto; }
+.yt-tabs .icon-btn { width: 38px; height: 38px; padding: 0; flex: 0 0 auto; }
+.yt-gone { align-self: center; white-space: nowrap; }
+.yt-board-error { padding: 0 4px; }
+
+/* A window of the exploded view: one part, the whole width. */
+.yt-board-body { min-height: 0; overflow-y: auto; display: grid; gap: 14px; align-content: start; padding: 2px 2px 24px; }
