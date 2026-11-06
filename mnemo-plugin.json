@@ -1,7 +1,7 @@
 {
   "name": "@mnemosyne-plugins/mnemo-youtube",
   "displayName": "MnemoPlayer",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "vendor": "Mnemosyne Labs",
   "license": "MIT",
   "repository": "https://github.com/Mnemosyne-OS/MnemoPlayer",

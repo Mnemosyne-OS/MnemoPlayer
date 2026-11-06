@@ -1,6 +1,6 @@
 {
   "name": "@mnemosyne-plugins/mnemo-youtube",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "private": true,
   "type": "module",
   "description": "Watch and listen to YouTube in a visible player, keep your own playlists, play your music folder, search by voice, and look after your channel: statistics, comments, replies and uploads you send yourself.",
